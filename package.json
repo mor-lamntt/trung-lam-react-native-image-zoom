@@ -1,6 +1,6 @@
 {
-  "name": "@likashefqet/react-native-image-zoom",
-  "version": "4.2.0",
+  "name": "@trunglam/trung-lam-react-native-image-zoom",
+  "version": "1.0.0",
   "description": "A performant zoomable image written in Reanimated v2+ 🚀",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -64,12 +64,12 @@
     "type": "git",
     "url": "git+https://github.com/likashefqet/react-native-image-zoom.git"
   },
-  "author": "Shefqet Lika <likashefi@gmail.com> (https://github.com/likashefqet)",
+  "author": "Trung Lam Nguyen  <lamntt@mor.com.vn> (https://github.com/mor-lamntt)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/likashefqet/react-native-image-zoom/issues"
+    "url": "https://github.com/mor-lamntt/trung-lam-react-native-image-zoom/issues"
   },
-  "homepage": "https://github.com/likashefqet/react-native-image-zoom#readme",
+  "homepage": "https://github.com/mor-lamntt/trung-lam-react-native-image-zoom#readme",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },
