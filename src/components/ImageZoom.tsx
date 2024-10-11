@@ -240,7 +240,7 @@ const Zoomable: ForwardRefRenderFunction<ImageZoomRef, ImageZoomProps> = (
                       pinsRef.current = [];
                     }
                     if (el) {
-                      pinsRef.current[index] = el;
+                      pinsRef.current[index] = el as any;
                     }
                   }}
                   key={index}
