@@ -12,7 +12,7 @@ const left = (width: number, scale: SharedValue<number>) => {
 
 const bottom = (height: number, scale: SharedValue<number>) => {
   'worklet';
-  return (height * (scale.value - 1)) / 2;
+  return height * (scale.value - 1) * 1.2;
 };
 
 const top = (height: number, scale: SharedValue<number>) => {

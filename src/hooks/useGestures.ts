@@ -52,6 +52,7 @@ export const useGestures = ({
   onDoubleTap = () => {},
   onProgrammaticZoom = () => {},
   onResetAnimationEnd,
+  onPinch,
 }: ZoomableUseGesturesProps) => {
   const isInteracting = useRef(false);
   const isPinching = useRef(false);
@@ -223,6 +224,11 @@ export const useGestures = ({
     onInteractionEnded();
   };
 
+  const onPinching: any = (...args) => {
+    isPinching.current = true;
+    onPinch?.(...args);
+  };
+
   const onPanStarted: OnPanStartCallback = (event) => {
     onInteractionStarted();
     startPan();
@@ -296,11 +302,7 @@ export const useGestures = ({
     .enableTrackpadTwoFingerGesture(true)
     .minPointers(1)
     .maxPointers(1)
-    .onTouchesDown((_, manager) => {
-      if (scale.value <= 1) {
-        manager.fail();
-      }
-    })
+    .onTouchesDown((_, ___) => {})
     .onStart((event) => {
       runOnJS(onPanStarted)(event);
       savedTranslate.x.value = translate.x.value;
@@ -368,6 +370,9 @@ export const useGestures = ({
       focal.y.value =
         savedFocal.y.value +
         (center.y - initialFocal.y.value) * (scale.value - savedScale.value);
+      if (scale.value > 1) {
+        runOnJS(onPinching)(event);
+      }
     })
     .onEnd((...args) => {
       runOnJS(onPinchEnded)(...args);
@@ -390,8 +395,8 @@ export const useGestures = ({
           withTimingConfig
         );
       } else {
-        runOnJS(onDoubleTap)(ZOOM_TYPE.ZOOM_OUT);
-        reset();
+        // runOnJS(onDoubleTap)(ZOOM_TYPE.ZOOM_OUT);
+        // reset();
       }
     });
 
@@ -423,5 +428,14 @@ export const useGestures = ({
       ? Gesture.Race(pinchPanGestures, panOnlyGesture, tapGestures)
       : pinchPanGestures;
 
-  return { gestures, animatedStyle, zoom, reset };
+  return {
+    gestures,
+    animatedStyle,
+    zoom,
+    reset,
+    savedScale,
+    scale,
+    translate,
+    focal,
+  };
 };

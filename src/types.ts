@@ -73,6 +73,17 @@ export type OnResetAnimationEndCallback = (
   >
 ) => void;
 
+export type OnPinchCallback = (
+  values?: Record<
+    ANIMATION_VALUE,
+    {
+      lastValue: number;
+      finished?: boolean;
+      current?: AnimatableValue;
+    }
+  >
+) => void;
+
 export type ZoomProps = {
   /**
    * The minimum scale allowed for zooming.
@@ -166,6 +177,21 @@ export type ZoomProps = {
    * The values parameter provides additional detailed information for each animation value.
    */
   onResetAnimationEnd?: OnResetAnimationEndCallback;
+
+  onPinch?: OnPinchCallback;
+
+  children?: React.ReactNode;
+
+  pins?: {
+    x: number;
+    y: number;
+    id: string;
+    render: React.ReactNode;
+  }[];
+
+  onAnimate?: (e: any) => void;
+  src?: string;
+  translateY?: any;
 };
 
 export type ZoomableProps = AnimateProps<ViewProps> & ZoomProps;
@@ -237,6 +263,9 @@ export type ZoomableUseGesturesProps = Pick<
     | 'onDoubleTap'
     | 'onProgrammaticZoom'
     | 'onResetAnimationEnd'
+    | 'onPinch'
+    | 'onAnimate'
+    | 'pins'
   >;
 
 export type ZoomableRef = {

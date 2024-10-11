@@ -154,7 +154,9 @@
           "trailingComma": "es5",
           "useTabs": false
         }
-      ]
+      ],
+      "react-hooks/exhaustive-deps": "off",
+      "no-shadow": "off"
     }
   },
   "eslintIgnore": [
