@@ -52,6 +52,7 @@ const Zoomable: ForwardRefRenderFunction<ImageZoomRef, ImageZoomProps> = (
     style = {},
     pins,
     src,
+    onResize,
     ...props
   },
   ref
@@ -81,26 +82,37 @@ const Zoomable: ForwardRefRenderFunction<ImageZoomRef, ImageZoomProps> = (
       if (pins) {
         scaleSharedValue.value = clamp(
           e.scale * scaleRef.current,
-          minScale ?? 1,
-          maxScale ?? 1
+          minScale ?? 0.5,
+          maxScale ?? 2
         );
       }
     },
-    [pinsRef.current, pins, imageRef.current, scaleRef.current]
+    [
+      pinsRef.current,
+      pins,
+      imageRef.current,
+      scaleRef.current,
+      onResize,
+      minScale,
+      maxScale,
+    ]
   );
 
   const onPinchEndInternal = useCallback(
     (e) => {
-      if (scaleRef.current * e.scale < (minScale ?? 1)) {
-        scaleRef.current = minScale ?? 1;
-      } else if (scaleRef.current * e.scale > (maxScale ?? 1)) {
-        scaleRef.current = maxScale ?? 1;
+      if (scaleRef.current * e.scale < (minScale ?? 0.5)) {
+        scaleRef.current = minScale ?? 0.5;
+        onResize && onResize(0.5);
+      } else if (scaleRef.current * e.scale > (maxScale ?? 2)) {
+        scaleRef.current = maxScale ?? 2;
+        onResize && onResize(2);
       } else {
         scaleRef.current = scaleRef.current * e.scale;
+        onResize && onResize(scaleRef.current);
       }
       onPinchEnd && onPinchEnd(e, true); // Assuming success is true, adjust
     },
-    [onPinchEnd, scaleRef.current]
+    [onPinchEnd, scaleRef.current, minScale, maxScale, onResize]
   );
 
   const { animatedStyle, gestures, onZoomableLayout } = useZoomable({
@@ -162,6 +174,9 @@ const Zoomable: ForwardRefRenderFunction<ImageZoomRef, ImageZoomProps> = (
         // Implement reset functionality here
         imageRef.current?.reset();
         onPinch({ scale: 1 / scaleRef.current });
+      },
+      getScale: () => {
+        return scaleRef.current;
       },
     }),
     [

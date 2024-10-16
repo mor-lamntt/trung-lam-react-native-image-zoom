@@ -367,7 +367,7 @@ export const useGestures = ({
       focal.y.value =
         savedFocal.y.value +
         (center.y - initialFocal.y.value) * (scale.value - savedScale.value);
-      if (scale.value > 1) {
+      if (scale.value >= 0.5) {
         runOnJS(onPinching)(event);
       }
     })

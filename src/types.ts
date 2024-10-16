@@ -192,6 +192,7 @@ export type ZoomProps = {
   onAnimate?: (e: any) => void;
   src?: string;
   translateY?: any;
+  onResize?: (e: any) => void;
 };
 
 export type ZoomableProps = AnimateProps<ViewProps> & ZoomProps;
@@ -266,6 +267,7 @@ export type ZoomableUseGesturesProps = Pick<
     | 'onPinch'
     | 'onAnimate'
     | 'pins'
+    | 'onResize'
   >;
 
 export type ZoomableRef = {
