@@ -145,18 +145,18 @@ const Zoomable: ForwardRefRenderFunction<ImageZoomRef, ImageZoomProps> = (
         });
         onPinch({ scale: scale });
       },
-      zoomTo: ({ _scale, x: xPercentage, y: yPercentage }) => {
+      zoomTo: ({ scale, x: xPercentage, y: yPercentage }) => {
         // Implement zoomTo functionality here
-        scaleRef.current = clamp(_scale, minScale ?? 1, maxScale ?? 1);
+        scaleRef.current = clamp(scale, minScale ?? 1, maxScale ?? 1);
         imageRef.current?.zoom({
-          scale: _scale,
+          scale: scale,
           x: (xPercentage / 100) * containerWidth,
           y:
             (yPercentage > 50
               ? yPercentage / 100 + 1 / 2
               : yPercentage / 100 - 1 / 2) * containerHeight,
         });
-        onPinch({ scale: _scale / scaleRef.current });
+        onPinch({ scale: scale / scaleRef.current });
       },
       reset: () => {
         // Implement reset functionality here
