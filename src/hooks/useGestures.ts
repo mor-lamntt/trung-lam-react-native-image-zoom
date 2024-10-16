@@ -168,14 +168,14 @@ export const useGestures = ({
         translate.y.value = withTiming(topLimit, withTimingConfig);
         focal.y.value = withTiming(0, withTimingConfig);
       }
-    } else {
+    } else if (scale.value < 0.5) {
       reset();
     }
   };
 
   const zoom: ProgrammaticZoomCallback = (event) => {
     'worklet';
-    if (event.scale > 1) {
+    if (event.scale > 0.5) {
       runOnJS(onProgrammaticZoom)(ZOOM_TYPE.ZOOM_IN);
       scale.value = withTiming(event.scale, withTimingConfig);
       focal.x.value = withTiming(
@@ -186,9 +186,6 @@ export const useGestures = ({
         (center.y - event.y) * (event.scale - 1),
         withTimingConfig
       );
-    } else {
-      runOnJS(onProgrammaticZoom)(ZOOM_TYPE.ZOOM_OUT);
-      reset();
     }
   };
 

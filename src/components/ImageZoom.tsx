@@ -1,9 +1,9 @@
+/* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable react-native/no-inline-styles */
 import React, {
   forwardRef,
   ForwardRefRenderFunction,
   useCallback,
-  useEffect,
   useImperativeHandle,
   useMemo,
   useState,
@@ -52,7 +52,6 @@ const Zoomable: ForwardRefRenderFunction<ImageZoomRef, ImageZoomProps> = (
     style = {},
     pins,
     src,
-    translateY,
     ...props
   },
   ref
@@ -61,7 +60,6 @@ const Zoomable: ForwardRefRenderFunction<ImageZoomRef, ImageZoomProps> = (
   const imageRef = React.useRef<ZoomableRef>(null);
   const scaleRef = React.useRef<number>(1);
 
-  const translateYSharedValue = useSharedValue(0);
   const scaleSharedValue = useSharedValue(1);
 
   const [imageWidth, setImageWidth] = useState(1);
@@ -73,7 +71,7 @@ const Zoomable: ForwardRefRenderFunction<ImageZoomRef, ImageZoomProps> = (
   const [isLoaded, setIsLoaded] = useState(false);
 
   const aspectRatio = useMemo(() => {
-    return imageWidth / imageHeight ;
+    return imageWidth / imageHeight;
   }, [imageHeight, imageWidth]);
 
   // const aspectRatio = useSharedValue(1);
@@ -147,18 +145,18 @@ const Zoomable: ForwardRefRenderFunction<ImageZoomRef, ImageZoomProps> = (
         });
         onPinch({ scale: scale });
       },
-      zoomTo: ({ scale, x: xPercentage, y: yPercentage }) => {
+      zoomTo: ({ _scale, x: xPercentage, y: yPercentage }) => {
         // Implement zoomTo functionality here
-        scaleRef.current = clamp(scale, minScale ?? 1, maxScale ?? 1);
+        scaleRef.current = clamp(_scale, minScale ?? 1, maxScale ?? 1);
         imageRef.current?.zoom({
-          scale: scale,
+          scale: _scale,
           x: (xPercentage / 100) * containerWidth,
           y:
             (yPercentage > 50
               ? yPercentage / 100 + 1 / 2
               : yPercentage / 100 - 1 / 2) * containerHeight,
         });
-        onPinch({ scale: scale / scaleRef.current });
+        onPinch({ scale: _scale / scaleRef.current });
       },
       reset: () => {
         // Implement reset functionality here
@@ -203,86 +201,85 @@ const Zoomable: ForwardRefRenderFunction<ImageZoomRef, ImageZoomProps> = (
   }));
 
   return (
-    <View
-      style={[{ flex: 1, justifyContent: 'center' }]}
-    >
-
-
-    {
-              isLoaded ?       <GestureDetector gesture={gestures}>
-              <Animated.View
-                ref={imageRef as React.RefObject<any>}
-                style={[
-                  { position: 'relative', backgroundColor: 'orange' },
-                  animatedStyle,
-                ]}
-              >
-                <Animated.Image
-                  key={`${imageHeight}-${imageWidth}-${aspectRatio}`}
-                  style={[styles.image, style, { aspectRatio }]}
-                  source={{ uri }}
-                  resizeMode="contain"
-                  onLayout={(event) => {
-                    onZoomableLayout(event);
-                    setContainerWidth(event.nativeEvent.layout.width);
-                    setContainerHeight(event.nativeEvent.layout.height);
-                  }}
-                  src={src}
-                  {...props}
-                />
-                {pins &&
-                  pins.map((booth: any, index: number) => {
-                    return (
-                      <Animated.View
-                        ref={(el) => {
-                          if (!pinsRef.current) {
-                            pinsRef.current = [];
-                          }
-                          if (el) {
-                            pinsRef.current[index] = el as any;
-                          }
-                        }}
-                        key={index}
-                        style={[
-                          {
-                            position: 'absolute',
-                            zIndex: 100,
-                            top: `${booth.y}%`,
-                            left: `${booth.x}%`,
-                            width: 22,
-                            height: 22,
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                          },
-                          animatedStyleScale,
-                        ]}
-                      >
-                        {booth.render()}
-                      </Animated.View>
-                    );
-                  })}
-              </Animated.View>
-            </GestureDetector>  :       <Image
-              source={{ uri: src }}
-              style={{ display: 'flex', height: 200, width: 200, opacity: 0, position: 'absolute', zIndex: -1 }}
-              onLoad={({
-                nativeEvent: {
-                  source: { width, height },
-                },
-              }) => {
-                if (width && height) {
-                  setImageWidth(width);
-                  setImageHeight(height);
-                  
-                }
+    <View style={[{ flex: 1, justifyContent: 'center' }]}>
+      {isLoaded ? (
+        <GestureDetector gesture={gestures}>
+          <Animated.View
+            ref={imageRef as React.RefObject<any>}
+            style={[{ position: 'relative' }, animatedStyle]}
+          >
+            <Animated.Image
+              key={`${imageHeight}-${imageWidth}-${aspectRatio}`}
+              style={[styles.image, style, { aspectRatio }]}
+              source={{ uri }}
+              resizeMode="contain"
+              onLayout={(event) => {
+                onZoomableLayout(event);
+                setContainerWidth(event.nativeEvent.layout.width);
+                setContainerHeight(event.nativeEvent.layout.height);
               }}
-      
-              onLoadEnd={() => {
-                setIsLoaded(true);
-              }}
-/>
-    }
-
+              src={src}
+              {...props}
+            />
+            {pins &&
+              pins.map((booth: any, index: number) => {
+                return (
+                  <Animated.View
+                    ref={(el) => {
+                      if (!pinsRef.current) {
+                        pinsRef.current = [];
+                      }
+                      if (el) {
+                        pinsRef.current[index] = el as any;
+                      }
+                    }}
+                    key={index}
+                    style={[
+                      {
+                        position: 'absolute',
+                        zIndex: 100,
+                        top: `${booth.y}%`,
+                        left: `${booth.x}%`,
+                        width: 22,
+                        height: 22,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      },
+                      animatedStyleScale,
+                    ]}
+                  >
+                    {booth.render()}
+                  </Animated.View>
+                );
+              })}
+          </Animated.View>
+        </GestureDetector>
+      ) : (
+        <Image
+          source={{ uri: src }}
+          style={{
+            display: 'flex',
+            height: 200,
+            width: 200,
+            opacity: 0,
+            position: 'absolute',
+            zIndex: -1,
+          }}
+          onLoad={({
+            nativeEvent: {
+              source: { width, height },
+            },
+          }) => {
+            if (width && height) {
+              setImageWidth(width);
+              setImageHeight(height);
+            }
+          }}
+          onLoadEnd={() => {
+            setIsLoaded(true);
+          }}
+        />
+      )}
     </View>
   );
 };
