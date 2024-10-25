@@ -105,7 +105,7 @@ const Zoomable: ForwardRefRenderFunction<ImageZoomRef, ImageZoomProps> = (
         onResize && onResize(0.5);
       } else if (scaleRef.current * e.scale > (maxScale ?? 3)) {
         scaleRef.current = maxScale ?? 3;
-        onResize && onResize(2);
+        onResize && onResize(3);
       } else {
         scaleRef.current = scaleRef.current * e.scale;
         onResize && onResize(scaleRef.current);
