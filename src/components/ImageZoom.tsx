@@ -83,7 +83,7 @@ const Zoomable: ForwardRefRenderFunction<ImageZoomRef, ImageZoomProps> = (
         scaleSharedValue.value = clamp(
           e.scale * scaleRef.current,
           minScale ?? 0.5,
-          maxScale ?? 2
+          maxScale ?? 3
         );
       }
     },
@@ -103,8 +103,8 @@ const Zoomable: ForwardRefRenderFunction<ImageZoomRef, ImageZoomProps> = (
       if (scaleRef.current * e.scale < (minScale ?? 0.5)) {
         scaleRef.current = minScale ?? 0.5;
         onResize && onResize(0.5);
-      } else if (scaleRef.current * e.scale > (maxScale ?? 2)) {
-        scaleRef.current = maxScale ?? 2;
+      } else if (scaleRef.current * e.scale > (maxScale ?? 3)) {
+        scaleRef.current = maxScale ?? 3;
         onResize && onResize(2);
       } else {
         scaleRef.current = scaleRef.current * e.scale;
