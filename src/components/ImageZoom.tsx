@@ -153,7 +153,8 @@ const Zoomable: ForwardRefRenderFunction<ImageZoomRef, ImageZoomProps> = (
         imageRef.current?.zoom({
           scale: scaleRef.current * scale,
           x: (xPercentage / 100) * containerWidth,
-          y: ((yPercentage / 100) * imageHeight * imageWidth) / containerWidth,
+          y:
+            (((yPercentage / 100) * imageHeight) / imageWidth) * containerWidth,
         });
         onPinch({ scale: scale });
       },
